@@ -135,7 +135,8 @@
                 const timerEl = document.getElementById('refresh-timer');
                 if (timerEl) timerEl.textContent = formatTime(timeLeft);
                 if (timeLeft <= 0) {
-                    timeLeft = 120;
+                    clearInterval(timerInterval);
+                    timerInterval = null;
                     loadContent();
                 }
             }, 1000);
@@ -318,6 +319,8 @@
                 console.error('Error loading content:', error);
                 document.getElementById('loading').classList.add('hidden');
                 document.getElementById('error').classList.remove('hidden');
+                // Hata durumunda da timer'ı yeniden başlat
+                startTimer();
             }
         }
 
