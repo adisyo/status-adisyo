@@ -3,7 +3,7 @@ Geçici Bir Teknik Aksaklık Yaşıyoruz.
 
 
 ## Aciklama
-Şu anda Adisyo hizmetlerinde geçici bir teknik problem nedeniyle erişim sağlanamamaktadır. Teknik ekibimiz durumu fark etmiş olup, sorunun giderilmesi için aktif olarak çalışmaktadır.
+Şu anda Adisyo hizmetlerinde geçici bir problem yaşanmaktadır. Teknik ekibimiz sorunun giderilmesi için aktif olarak çalışmaktadır.
 
 
 ## Uyari_Mesaji
@@ -11,7 +11,7 @@ Mevcut durumda verilerinizin güvenliği ile ilgili herhangi bir risk bulunmamak
 
 
 ## Ozur_Mesaji
-Yaşanan aksaklık nedeniyle özür dileriz. Hizmetin en kısa sürede yeniden erişilebilir olması için tüm sorumluluğu üstleniyoruz.
+Yaşanan aksaklık nedeniyle çok üzgünüz. Hizmeti en kısa sürede yeniden kullanıma açmak için ekiplerimiz aralıksız çalışıyor.
 
 
 ## Durum_Bilgisi

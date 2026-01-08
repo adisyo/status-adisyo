@@ -22,9 +22,9 @@
 
 <body class="bg-gray-50 min-h-screen flex flex-col items-center py-8 px-4 sm:px-6 lg:px-8">
     <!-- Header / Logo -->
-    <header class="w-full max-w-3xl mb-12 text-center">
-        <div class="flex justify-center mb-6">
-            <img src="./logo-red.png" alt="Adisyo" class="h-16">
+    <header class="w-full max-w-3xl mb-6 text-center">
+        <div class="flex justify-center mb-4">
+            <img src="./logo-red.png" alt="Adisyo" class="h-12">
         </div>
     </header>
 
@@ -118,18 +118,16 @@
             return `${day} ${month} ${year} - ${hours}:${minutes}`;
         }
 
-        let timeLeft = 120;
+        let timeLeft = 60;
         let timerInterval = null;
 
         function formatTime(seconds) {
-            const mins = Math.floor(seconds / 60);
-            const secs = seconds % 60;
-            return `${mins}:${secs.toString().padStart(2, '0')} dk`;
+            return `${seconds} sn`;
         }
 
         function startTimer() {
             if (timerInterval) clearInterval(timerInterval);
-            timeLeft = 120;
+            timeLeft = 60;
             timerInterval = setInterval(() => {
                 timeLeft--;
                 const timerEl = document.getElementById('refresh-timer');
@@ -173,30 +171,30 @@
             if (showMainMessage && (mainTitle || description || warningMessage)) {
                 html += `
                     <section class="bg-white rounded-3xl shadow-xl overflow-hidden border border-gray-100">
-                        <div class="p-8 md:p-12 text-center border-b border-gray-50 bg-white">
-                            <div class="inline-flex items-center justify-center p-4 bg-red-50 rounded-full mb-6">
-                                <svg class="w-10 h-10 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div class="p-6 md:p-8 text-center border-b border-gray-50 bg-white">
+                            <div class="inline-flex items-center justify-center p-3 bg-red-50 rounded-full mb-4">
+                                <svg class="w-7 h-7 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
                                 </svg>
                             </div>
                 `;
                 if (mainTitle) {
-                    html += `<h1 class="text-3xl font-bold text-gray-900 mb-4 tracking-tight">${mainTitle}</h1>`;
+                    html += `<h1 class="text-2xl font-bold text-gray-900 mb-3 tracking-tight">${mainTitle}</h1>`;
                 }
                 if (description) {
-                    html += `<p class="text-lg text-gray-600 leading-relaxed max-w-2xl mx-auto">${description}</p>`;
+                    html += `<p class="text-base text-gray-600 leading-relaxed max-w-2xl mx-auto">${description}</p>`;
                 }
                 html += `</div>`;
 
                 if (warningMessage) {
                     html += `
-                        <div class="bg-indigo-50 px-8 py-5 flex items-center gap-4">
-                            <div class="bg-white p-2 rounded-xl shadow-sm">
-                                <svg class="w-6 h-6 text-indigo-600" fill="currentColor" viewBox="0 0 20 20">
+                        <div class="bg-indigo-50 px-4 py-3 flex items-center gap-3">
+                            <div class="bg-white p-1.5 rounded-lg shadow-sm">
+                                <svg class="w-5 h-5 text-indigo-600" fill="currentColor" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
                                 </svg>
                             </div>
-                            <p class="text-sm md:text-base text-indigo-900 font-medium">${warningMessage}</p>
+                            <p class="text-xs md:text-sm text-indigo-900 font-medium">${warningMessage}</p>
                         </div>
                     `;
                 }
@@ -227,16 +225,14 @@
                         <div class="grid grid-cols-1 ${gridCols} gap-8">
                             <div class="space-y-2">
                                 <span class="text-xs font-bold text-gray-400 uppercase tracking-widest">Son Güncelleme</span>
-                                <div class="flex items-center gap-2 text-gray-700 font-medium">
-                                    <span class="w-1.5 h-1.5 bg-gray-300 rounded-full"></span>
+                                <div class="text-gray-700 font-medium">
                                     ${lastUpdate}
                                 </div>
                             </div>
 
                             <div class="space-y-2">
                                 <span class="text-xs font-bold text-gray-400 uppercase tracking-widest">Mevcut Durum</span>
-                                <div class="flex items-center gap-2 text-gray-700 font-medium">
-                                    <span class="w-1.5 h-1.5 bg-gray-300 rounded-full"></span>
+                                <div class="text-gray-700 font-medium">
                                     ${statusInfo.statusText || ''}
                                 </div>
                             </div>
@@ -244,8 +240,7 @@
                             ${showEstimatedTime ? `
                             <div class="space-y-2">
                                 <span class="text-xs font-bold text-gray-400 uppercase tracking-widest">Tahmini Süre</span>
-                                <div class="flex items-center gap-2 text-red-600 font-bold">
-                                    <span class="w-1.5 h-1.5 bg-red-400 rounded-full"></span>
+                                <div class="${colorClasses.text} font-bold">
                                     ${timeText}
                                 </div>
                             </div>
@@ -263,16 +258,16 @@
                                     </a>
                                 </div>
                             ` : ''}
-                            <div class="flex flex-col md:flex-row items-center justify-between gap-4">
-                                <div class="flex items-center gap-3 text-sm text-gray-500 font-medium">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <div class="flex flex-col md:flex-row items-center justify-between gap-3">
+                                <div class="flex items-center gap-2 text-xs text-gray-500 font-medium">
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
                                     </svg>
                                    <span>
                                      Sayfa otomatik olarak <span id="refresh-timer">${formatTime(timeLeft)}</span> içerisinde güncellenir
                                    </span>
                                 </div>
-                                <button onclick="location.reload()" class="text-blue-600 hover:text-blue-700 text-sm font-medium underline">Şimdi Yenile</button>
+                                <button onclick="location.reload()" class="text-blue-600 hover:text-blue-700 text-xs font-medium underline">Şimdi Yenile</button>
                             </div>
                         </div>
                     </section>
@@ -282,11 +277,11 @@
             const apologyMessage = getSection(sections, 'Ozur_Mesaji');
             if (showApology && apologyMessage) {
                 html += `
-                    <footer class="text-center py-6 px-4">
-                        <p class="text-gray-500 text-sm leading-relaxed max-w-md mx-auto italic">
+                    <footer class="text-center py-4 px-4">
+                        <p class="text-gray-500 text-xs leading-relaxed max-w-md mx-auto italic">
                             "${apologyMessage}"
                         </p>
-                        <div class="mt-8 flex justify-center gap-6 opacity-40 grayscale transition-all hover:grayscale-0 hover:opacity-100">
+                        <div class="mt-3 flex justify-center gap-6 opacity-40 grayscale transition-all hover:grayscale-0 hover:opacity-100">
                             <span class="text-xs font-bold text-gray-400 uppercase tracking-tighter">adisyo</span>
                         </div>
                     </footer>
