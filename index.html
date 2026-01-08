@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adisyo - Durum Sayfası</title>
+    <link rel="icon" type="image/png" href="./favicon.png">
+    <link rel="apple-touch-icon" href="./favicon.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50 min-h-screen flex flex-col items-center py-8 px-4 sm:px-6 lg:px-8">
+    <!-- Header / Logo -->
+    <header class="w-full max-w-3xl mb-12 text-center">
+        <div class="flex justify-center mb-6">
+            <img src="./logo-red.png" alt="Adisyo" class="h-16">
+        </div>
+    </header>
+
+    <main class="w-full max-w-3xl space-y-6">
+        <!-- Content Container -->
+        <div id="content-container" class="space-y-6">
+            <!-- Loading State -->
+            <div id="loading" class="text-center py-12">
+                <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-orange-600"></div>
+                <p class="mt-4 text-gray-600">Yükleniyor...</p>
+            </div>
+
+            <!-- Error State -->
+            <div id="error" class="hidden bg-red-50 border border-red-200 rounded-lg p-6 text-center">
+                <p class="text-red-800">İçerik yüklenirken bir hata oluştu.</p>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function normalizeSectionName(name) {
+            return name.toLowerCase().trim()
+                .replace(/\s+/g, '_')
+                .replace(/[ıİ]/g, 'i').replace(/[şŞ]/g, 's').replace(/[ğĞ]/g, 'g')
+                .replace(/[üÜ]/g, 'u').replace(/[öÖ]/g, 'o').replace(/[çÇ]/g, 'c');
+        }
+
+        function parseMarkdown(markdown) {
+            const sections = {};
+            let currentSection = null;
+            let currentContent = [];
+            const htmlCommentRegex = new RegExp('<!--[\\s\\S]*?-->', 'g');
+            const cleanedMarkdown = markdown.replace(htmlCommentRegex, '');
+            const lines = cleanedMarkdown.split('\n');
+
+            for (let line of lines) {
+                if (line.startsWith('## ')) {
+                    if (currentSection) {
+                        sections[currentSection] = currentContent.join('\n').trim();
+                    }
+                    currentSection = normalizeSectionName(line.replace('## ', '').trim());
+                    currentContent = [];
+                } else if (currentSection) {
+                    currentContent.push(line);
+                }
+            }
+
+            if (currentSection) {
+                sections[currentSection] = currentContent.join('\n').trim();
+            }
+
+            return sections;
+        }
+
+        function parseStatusInfo(statusText) {
+            const info = {};
+            const lines = statusText.split('\n');
+            const clean = (str) => str?.replace(/\*\*/g, '').trim();
+            for (let line of lines) {
+                const lower = line.toLowerCase();
+                if (lower.includes('status:')) {
+                    const val = parseInt(line.match(/status:\s*(\d+)/i)?.[1], 10);
+                    if (val >= 1 && val <= 3) info.status = val;
+                } else if (lower.includes('mevcut_durum:') || lower.includes('mevcut durum:')) {
+                    info.statusText = clean(line.match(/mevcut[_\s]?durum:\s*(.+)/i)?.[1]);
+                } else if (lower.includes('tahmini_sure:') || lower.includes('tahmini sure:')) {
+                    info.estimatedTime = clean(line.match(/tahmini[_\s]?sure:\s*(.+)/i)?.[1]);
+                }
+            }
+            return info;
+        }
+
+        function getStatusColor(status) {
+            const colorMap = {
+                1: { bg: 'bg-green-50', text: 'text-green-700', badge: 'bg-green-500' },
+                2: { bg: 'bg-orange-50', text: 'text-orange-700', badge: 'bg-orange-500' },
+                3: { bg: 'bg-red-50', text: 'text-red-700', badge: 'bg-red-500' }
+            };
+            return colorMap[status] || colorMap[2];
+        }
+
+        function formatDateTime() {
+            const now = new Date();
+            const months = ['Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran', 
+                          'Temmuz', 'Ağustos', 'Eylül', 'Ekim', 'Kasım', 'Aralık'];
+            const day = now.getDate();
+            const month = months[now.getMonth()];
+            const year = now.getFullYear();
+            const hours = now.getHours().toString().padStart(2, '0');
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            return `${day} ${month} ${year} - ${hours}:${minutes}`;
+        }
+
+        let timeLeft = 120;
+        let timerInterval = null;
+
+        function formatTime(seconds) {
+            const mins = Math.floor(seconds / 60);
+            const secs = seconds % 60;
+            return `${mins}:${secs.toString().padStart(2, '0')} dk`;
+        }
+
+        function startTimer() {
+            if (timerInterval) clearInterval(timerInterval);
+            timeLeft = 120;
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                const timerEl = document.getElementById('refresh-timer');
+                if (timerEl) timerEl.textContent = formatTime(timeLeft);
+                if (timeLeft <= 0) {
+                    timeLeft = 120;
+                    loadContent();
+                }
+            }, 1000);
+        }
+
+        function getSection(sections, standardName) {
+            return sections[normalizeSectionName(standardName)] || null;
+        }
+
+        function renderContent(sections) {
+            const container = document.getElementById('content-container');
+            document.getElementById('loading').classList.add('hidden');
+            document.getElementById('error').classList.add('hidden');
+
+            let html = '';
+            let statusInfo = {};
+            const statusSection = getSection(sections, 'Durum_Bilgisi');
+            if (statusSection) {
+                statusInfo = parseStatusInfo(statusSection);
+            }
+
+            const statusNumber = parseInt(statusInfo.status, 10);
+            const currentStatus = (!isNaN(statusNumber) && statusNumber >= 1 && statusNumber <= 3) ? statusNumber : 2;
+            
+            const showMainMessage = currentStatus !== 1;
+            const showEstimatedTime = currentStatus !== 1;
+            const showApology = currentStatus !== 1;
+            const showLoginButton = currentStatus === 1;
+
+            const mainTitle = getSection(sections, 'Ana_Baslik');
+            const description = getSection(sections, 'Aciklama');
+            const warningMessage = getSection(sections, 'Uyari_Mesaji');
+            
+            if (showMainMessage && (mainTitle || description || warningMessage)) {
+                html += `
+                    <section class="bg-white rounded-3xl shadow-xl overflow-hidden border border-gray-100">
+                        <div class="p-8 md:p-12 text-center border-b border-gray-50 bg-white">
+                            <div class="inline-flex items-center justify-center p-4 bg-red-50 rounded-full mb-6">
+                                <svg class="w-10 h-10 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                                </svg>
+                            </div>
+                `;
+                if (mainTitle) {
+                    html += `<h1 class="text-3xl font-bold text-gray-900 mb-4 tracking-tight">${mainTitle}</h1>`;
+                }
+                if (description) {
+                    html += `<p class="text-lg text-gray-600 leading-relaxed max-w-2xl mx-auto">${description}</p>`;
+                }
+                html += `</div>`;
+
+                if (warningMessage) {
+                    html += `
+                        <div class="bg-indigo-50 px-8 py-5 flex items-center gap-4">
+                            <div class="bg-white p-2 rounded-xl shadow-sm">
+                                <svg class="w-6 h-6 text-indigo-600" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                </svg>
+                            </div>
+                            <p class="text-sm md:text-base text-indigo-900 font-medium">${warningMessage}</p>
+                        </div>
+                    `;
+                }
+                html += `</section>`;
+            }
+
+            if (statusInfo) {
+                const colorClasses = getStatusColor(currentStatus);
+                const timeText = statusInfo.estimatedTime || '';
+                const gridCols = showEstimatedTime ? 'md:grid-cols-3' : 'md:grid-cols-2';
+                const lastUpdate = formatDateTime();
+
+                html += `
+                    <section class="bg-white rounded-3xl shadow-lg border border-gray-100 p-8">
+                        <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8">
+                            <div class="flex items-center gap-3">
+                                <div class="relative">
+                                    <div class="w-3 h-3 ${colorClasses.badge} rounded-full"></div>
+                                    <div class="absolute inset-0 w-3 h-3 ${colorClasses.badge} rounded-full animate-ping opacity-75"></div>
+                                </div>
+                                <h2 class="text-xl font-bold text-gray-800">Canlı Durum Bilgisi</h2>
+                            </div>
+                            <div class="flex items-center ${colorClasses.bg} ${colorClasses.text} px-4 py-2 rounded-full font-semibold text-sm w-fit">
+                                ${statusInfo.statusText || ''}
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 ${gridCols} gap-8">
+                            <div class="space-y-2">
+                                <span class="text-xs font-bold text-gray-400 uppercase tracking-widest">Son Güncelleme</span>
+                                <div class="flex items-center gap-2 text-gray-700 font-medium">
+                                    <span class="w-1.5 h-1.5 bg-gray-300 rounded-full"></span>
+                                    ${lastUpdate}
+                                </div>
+                            </div>
+
+                            <div class="space-y-2">
+                                <span class="text-xs font-bold text-gray-400 uppercase tracking-widest">Mevcut Durum</span>
+                                <div class="flex items-center gap-2 text-gray-700 font-medium">
+                                    <span class="w-1.5 h-1.5 bg-gray-300 rounded-full"></span>
+                                    ${statusInfo.statusText || ''}
+                                </div>
+                            </div>
+
+                            ${showEstimatedTime ? `
+                            <div class="space-y-2">
+                                <span class="text-xs font-bold text-gray-400 uppercase tracking-widest">Tahmini Süre</span>
+                                <div class="flex items-center gap-2 text-red-600 font-bold">
+                                    <span class="w-1.5 h-1.5 bg-red-400 rounded-full"></span>
+                                    ${timeText}
+                                </div>
+                            </div>
+                            ` : ''}
+                        </div>
+
+                        <div class="mt-8 pt-8 border-t border-gray-50">
+                            ${showLoginButton ? `
+                                <div class="text-center mb-6">
+                                    <a href="https://pos.adisyo.com" class="inline-flex items-center justify-center gap-2 text-white font-semibold px-6 py-3 rounded-lg transition-colors duration-200 shadow-md hover:shadow-lg" style="background-color: rgb(185, 59, 53);" onmouseover="this.style.backgroundColor='rgb(165, 49, 43)'" onmouseout="this.style.backgroundColor='rgb(185, 59, 53)'">
+                                        Uygulamaya Giriş Yap
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+                                        </svg>
+                                    </a>
+                                </div>
+                            ` : ''}
+                            <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+                                <div class="flex items-center gap-3 text-sm text-gray-500 font-medium">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                                    </svg>
+                                   <span>
+                                     Sayfa otomatik olarak <span id="refresh-timer">${formatTime(timeLeft)}</span> içerisinde güncellenir
+                                   </span>
+                                </div>
+                                <button onclick="location.reload()" class="text-blue-600 hover:text-blue-700 text-sm font-medium underline">Şimdi Yenile</button>
+                            </div>
+                        </div>
+                    </section>
+                `;
+            }
+
+            const apologyMessage = getSection(sections, 'Ozur_Mesaji');
+            if (showApology && apologyMessage) {
+                html += `
+                    <footer class="text-center py-6 px-4">
+                        <p class="text-gray-500 text-sm leading-relaxed max-w-md mx-auto italic">
+                            "${apologyMessage}"
+                        </p>
+                        <div class="mt-8 flex justify-center gap-6 opacity-40 grayscale transition-all hover:grayscale-0 hover:opacity-100">
+                            <span class="text-xs font-bold text-gray-400 uppercase tracking-tighter">adisyo</span>
+                        </div>
+                    </footer>
+                `;
+            }
+
+            container.innerHTML = html;
+            startTimer();
+        }
+
+        async function loadContent() {
+            try {
+                const response = await fetch('./content.md');
+                if (!response.ok) {
+                    throw new Error('Content file not found');
+                }
+                const markdown = await response.text();
+                const sections = parseMarkdown(markdown);
+                renderContent(sections);
+            } catch (error) {
+                console.error('Error loading content:', error);
+                document.getElementById('loading').classList.add('hidden');
+                document.getElementById('error').classList.remove('hidden');
+            }
+        }
+
+        loadContent();
+    </script>
+</body>
+
+</html>
