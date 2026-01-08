@@ -19,7 +19,7 @@ Yaşanan aksaklık nedeniyle çok üzgünüz. Hizmeti en kısa sürede yeniden k
 <!-- 2: Müdahale ediliyor, tüm mesajlar ve tahmini süre gösterilir -->
 <!-- 3: Ciddi sorun, tüm mesajlar ve uyarılar gösterilir -->
 - Status: 1
-- Mevcut_Durum: Müdahale Ediliyor
+- Mevcut_Durum: Normal
 - Tahmini_Sure: 30-45 dakika
 
 <!-- ============================================ -->
