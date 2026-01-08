@@ -21,7 +21,7 @@ Yaşanan aksaklık nedeniyle özür dileriz. Hizmetin en kısa sürede yeniden e
 
 - Status: 3
 - Mevcut_Durum: Müdahale Ediliyor
-- Tahmini_Sure: -
+- Tahmini_Sure: 30-40 dk
 
 <!-- ============================================ -->
 <!-- HAZIR ÖRNEKLER - Copy Paste için -->
