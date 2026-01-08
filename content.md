@@ -18,10 +18,9 @@ Yaşanan aksaklık nedeniyle özür dileriz. Hizmetin en kısa sürede yeniden e
 <!-- 1: Her şey normal, giriş butonu gösterilir, ana mesaj ve özür mesajı gizlenir -->
 <!-- 2: Müdahale ediliyor, tüm mesajlar ve tahmini süre gösterilir -->
 <!-- 3: Ciddi sorun, tüm mesajlar ve uyarılar gösterilir -->
-
-- Status: 1
-- Mevcut_Durum: Normal
-- Tahmini_Sure: -
+- Status: 2
+- Mevcut_Durum: Bakım Çalışması Yapılıyor
+- Tahmini_Sure: 30-45 dakika
 
 <!-- ============================================ -->
 <!-- HAZIR ÖRNEKLER - Copy Paste için -->
