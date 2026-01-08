@@ -19,9 +19,9 @@ Yaşanan aksaklık nedeniyle özür dileriz. Hizmetin en kısa sürede yeniden e
 <!-- 2: Müdahale ediliyor, tüm mesajlar ve tahmini süre gösterilir -->
 <!-- 3: Ciddi sorun, tüm mesajlar ve uyarılar gösterilir -->
 
-- Status: 3
-- Mevcut_Durum: Müdahale Ediliyor
-- Tahmini_Sure: 5-10 dk
+- Status: 1
+- Mevcut_Durum: Normal
+- Tahmini_Sure: -
 
 <!-- ============================================ -->
 <!-- HAZIR ÖRNEKLER - Copy Paste için -->
