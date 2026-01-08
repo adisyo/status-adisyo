@@ -3,7 +3,7 @@ Geçici Bir Teknik Aksaklık Yaşıyoruz.
 
 
 ## Aciklama
-Şu anda Adisyo hizmetlerinde geçici bir problem yaşanmaktadır. Teknik ekibimiz sorunun giderilmesi için aktif olarak çalışmaktadır.
+Db de bir sorun yaşıyoruz
 
 
 ## Uyari_Mesaji
