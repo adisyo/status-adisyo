@@ -17,7 +17,7 @@ Yaşanan aksaklık nedeniyle çok üzgünüz. Hizmeti en kısa sürede yeniden k
 <!-- 1: Her şey normal, giriş butonu gösterilir, ana mesaj ve özür mesajı gizlenir, durum: aktif -->
 <!-- 2: Sorun var, tüm mesajlar ve uyarılar gösterilir, durum: müdahale ediliyor -->
 
-- Status: 2
+- Status: 1
 - Tahmini_Sure: 5-10 dakika
 
 
