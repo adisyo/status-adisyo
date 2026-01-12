@@ -1,5 +1,5 @@
 ## Ana_Baslik
-Geçici Bir Teknik Aksaklık Yaşıyoruz. deneme
+Geçici Bir Teknik Aksaklık Yaşıyoruz.
 
 
 ## Aciklama
