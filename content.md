@@ -19,7 +19,7 @@ Yaşanan aksaklık nedeniyle çok üzgünüz. Hizmeti en kısa sürede yeniden k
 <!-- 3: Ciddi sorun, tüm mesajlar ve uyarılar gösterilir -->
 - Status: 2
 - Mevcut_Durum: Müdahale Ediliyor
-- Tahmini_Sure: 10-15 dakika
+- Tahmini_Sure: 5-10 dakika
 
 <!-- ============================================ -->
 <!-- HAZIR ÖRNEKLER - Copy Paste için -->
