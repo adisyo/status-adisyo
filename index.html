@@ -87,9 +87,7 @@
                 const lower = line.toLowerCase();
                 if (lower.includes('status:')) {
                     const val = parseInt(line.match(/status:\s*(\d+)/i)?.[1], 10);
-                    if (val >= 1 && val <= 3) info.status = val;
-                } else if (lower.includes('mevcut_durum:') || lower.includes('mevcut durum:')) {
-                    info.statusText = clean(line.match(/mevcut[_\s]?durum:\s*(.+)/i)?.[1]);
+                    if (val >= 1 && val <= 2) info.status = val;
                 } else if (lower.includes('tahmini_sure:') || lower.includes('tahmini sure:')) {
                     info.estimatedTime = clean(line.match(/tahmini[_\s]?sure:\s*(.+)/i)?.[1]);
                 }
@@ -100,10 +98,17 @@
         function getStatusColor(status) {
             const colorMap = {
                 1: { bg: 'bg-green-50', text: 'text-green-700', badge: 'bg-green-500' },
-                2: { bg: 'bg-orange-50', text: 'text-orange-700', badge: 'bg-orange-500' },
-                3: { bg: 'bg-red-50', text: 'text-red-700', badge: 'bg-red-500' }
+                2: { bg: 'bg-red-50', text: 'text-red-700', badge: 'bg-red-500' }
             };
             return colorMap[status] || colorMap[2];
+        }
+
+        function getStatusText(status) {
+            const statusMap = {
+                1: 'Aktif',
+                2: 'Müdahale Ediliyor'
+            };
+            return statusMap[status] || 'Müdahale Ediliyor';
         }
 
         function formatDateTime() {
@@ -157,7 +162,8 @@
             }
 
             const statusNumber = parseInt(statusInfo.status, 10);
-            const currentStatus = (!isNaN(statusNumber) && statusNumber >= 1 && statusNumber <= 3) ? statusNumber : 2;
+            const currentStatus = (!isNaN(statusNumber) && statusNumber >= 1 && statusNumber <= 2) ? statusNumber : 2;
+            const statusText = getStatusText(currentStatus);
             
             const showMainMessage = currentStatus !== 1;
             const showEstimatedTime = currentStatus !== 1;
@@ -218,7 +224,7 @@
                                 <h2 class="text-xl font-bold text-gray-800">Canlı Durum Bilgisi</h2>
                             </div>
                             <div class="flex items-center ${colorClasses.bg} ${colorClasses.text} px-4 py-2 rounded-full font-semibold text-sm w-fit">
-                                ${statusInfo.statusText || ''}
+                                ${statusText}
                             </div>
                         </div>
 
@@ -233,7 +239,7 @@
                             <div class="space-y-2">
                                 <span class="text-xs font-bold text-gray-400 uppercase tracking-widest">Mevcut Durum</span>
                                 <div class="text-gray-700 font-medium">
-                                    ${statusInfo.statusText || ''}
+                                    ${statusText}
                                 </div>
                             </div>
 

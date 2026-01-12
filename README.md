@@ -21,14 +21,12 @@ Uyarı mesajı
 
 ## Durum_Bilgisi
 - Status: 2
-- Mevcut_Durum: Müdahale Ediliyor
 - Tahmini_Sure: 10-15 dakika
 ```
 
 ## Status Değerleri
 
-- **Status: 1** → Yeşil (Normal) - Giriş butonu gösterilir
-- **Status: 2** → Turuncu (Müdahale) - Tüm mesajlar gösterilir
-- **Status: 3** → Kırmızı (Ciddi) - Tüm mesajlar gösterilir
+- **Status: 1** → Yeşil (Aktif) - Giriş butonu gösterilir, ana mesaj ve özür mesajı gizlenir. Durum: "Aktif"
+- **Status: 2** → Kırmızı (Müdahale Ediliyor) - Tüm mesajlar gösterilir. Durum: "Müdahale Ediliyor"
 
-Renk otomatik olarak status'a göre belirlenir.
+Durum metni otomatik olarak status'a göre belirlenir. Mevcut_Durum alanına gerek yoktur.

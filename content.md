@@ -15,9 +15,9 @@ Yaşanan aksaklık nedeniyle çok üzgünüz. Hizmeti en kısa sürede yeniden k
 
 ## Durum_Bilgisi
 <!-- 1: Her şey normal, giriş butonu gösterilir, ana mesaj ve özür mesajı gizlenir, durum: aktif -->
-<!-- 2: Ciddi sorun, tüm mesajlar ve uyarılar gösterilir,  durum: müdahale ediliyor -->
+<!-- 2: Sorun var, tüm mesajlar ve uyarılar gösterilir, durum: müdahale ediliyor -->
 
-- Status: 1
+- Status: 2
 - Tahmini_Sure: 5-10 dakika
 
 
