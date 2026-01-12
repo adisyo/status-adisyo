@@ -1,5 +1,5 @@
 ## Ana_Baslik
-Geçici Bir Teknik Aksaklık Yaşıyoruz. deneme
+Geçici Bir Teknik Aksaklık Yaşıyoruz.
 
 
 ## Aciklama
@@ -7,8 +7,7 @@ Db de bir sorun yaşıyoruz
 
 
 ## Uyari_Mesaji
-Mevcut durumda verilerinizin güvenliği ile ilgili herhangi bir risk bulunmamaktadır. Tüm kayıtlarınız korunmaktadır.
-
+Veri güvenliğinizle ilgili herhangi bir risk bulunmamaktadır, tüm kayıtlarınız güvendedir.
 
 ## Ozur_Mesaji
 Yaşanan aksaklık nedeniyle çok üzgünüz. Hizmeti en kısa sürede yeniden kullanıma açmak için ekiplerimiz aralıksız çalışıyor.
