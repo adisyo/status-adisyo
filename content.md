@@ -3,7 +3,7 @@ Geçici Bir Teknik Aksaklık Yaşıyoruz.
 
 
 ## Aciklama
-Db de bir sorun yaşıyoruz.
+Db de bir sorun yaşıyoruz. Db de bir sorun yaşıyoruz. Db de bir sorun yaşıyoruz. Db de bir sorun yaşıyoruz. Db de bir sorun yaşıyoruz. Db de bir sorun yaşıyoruz.
 
 
 ## Uyari_Mesaji
