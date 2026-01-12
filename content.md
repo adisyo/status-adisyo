@@ -18,6 +18,6 @@ Yaşanan aksaklık nedeniyle çok üzgünüz. Hizmeti en kısa sürede yeniden k
 <!-- 2: Sorun var, tüm mesajlar ve uyarılar gösterilir, durum: müdahale ediliyor -->
 
 - Status: 1
-- Tahmini_Sure: 5-10 dakika
+- Tahmini_Sure: 10-15 dakika
 
 
