@@ -3,8 +3,7 @@ Geçici Bir Teknik Aksaklık Yaşıyoruz.
 
 
 ## Aciklama
-Db de bir sorun yaşıyoruz.
-
+Şu anda veri tabanımızda yaşanan teknik bir sorun nedeniyle Adisyo’ya erişimde genel bir kesinti yaşanmaktadır.
 
 ## Uyari_Mesaji
 Veri güvenliğinizle ilgili herhangi bir risk bulunmamaktadır, tüm kayıtlarınız güvendedir.
